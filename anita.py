@@ -85,6 +85,17 @@ arch_props = {
         'scratch_disk': 'wd1c',
         'memory_size': '128M',
     },
+    'evbarm-earmv6hf': {
+        'qemu': {
+            'executable': 'qemu-system-arm',
+            'machine_default': 'raspi2b',
+        },
+        'image_name': 'rpi.img.gz',
+        'kernel_name': ['netbsd-RPI2.gz'],
+        'scratch_disk': None,
+        'memory_size': '1G',
+        'disk_size': '2G',
+    },
     'evbarm-earmv7hf': {
         'qemu': {
             'executable': 'qemu-system-arm',
@@ -1186,6 +1197,16 @@ class Anita(object):
             a = ["-emobilepro880"]
         elif self.dist.arch() == 'macppc':
             a = ["-M", self.machine, "-prom-env", "qemu_boot_hack=y"]
+        elif self.dist.arch() == 'evbarm-earmv6hf':
+            a = ['-M', self.machine]
+            if self.machine == 'virt':
+                a += [
+                    '-append', 'root=ld4a',
+                ]
+            else:
+                a += [
+                    '-append', 'root=ld0a',
+                ]
         elif self.dist.arch() == 'evbarm-earmv7hf':
             a = ['-M', self.machine]
             if self.machine == 'virt':
